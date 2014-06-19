@@ -13,7 +13,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	@IBOutlet var libraryTableView: UITableView
 	var libraries = Library[]()
 	
-	var books = Book[]()
+//	Test Array.
+//	var books = Book[]()
 	
 	struct MainStoryboard {
 		struct TableViewIdentifiers {

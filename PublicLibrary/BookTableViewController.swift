@@ -8,10 +8,15 @@
 
 import UIKit
 
-class BookTableViewController: UITableViewController {
+class BookTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	
-//	Put shelfName and books arrays into getters and setters. Then add code to allow them to
-	var shelfName: String = "Shelf Name"
+	struct BookTableView {
+		struct TableViewIdentifiers {
+			static let bookCell = "Cell"
+		}
+	}
+	
+	var shelfName: String = "Books"
 
 //	var books {
 //	get {
@@ -27,8 +32,22 @@ class BookTableViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-//		This'll pull out the book and the stuff related to it.
 		self.title = shelfName
 	}
+	
+	//#pragma mark - TableViewDataSource
+	func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
+		return 5
+	}
+	
+	func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
+		var cell = tableView.dequeueReusableCellWithIdentifier(BookTableView.TableViewIdentifiers.bookCell, forIndexPath: indexPath) as UITableViewCell
+		
+		return cell
+	}
+	
+	
+//	#pragma mark - Editing Features.
+	
 	
 }

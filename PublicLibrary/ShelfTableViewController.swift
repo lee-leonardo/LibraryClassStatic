@@ -12,10 +12,17 @@ protocol ShelfTableViewControllerDelegate {
 	
 }
 
-class ShelfTableViewController: UITableViewController {
-//, UITableViewDataSource, UITableViewDelegate {
-	var libraryName = "This is the name"
+class ShelfTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+	
 //	@IBOutlet var shelvesTableView: UITableview
+
+	
+	struct ShelfTableView {
+		struct TableViewIdentifiers {
+			static let shelfCell = "Cell"
+		}
+	}
+	var libraryName = "Shelves"
 	
 //	var shelves {
 //	get {
@@ -26,19 +33,24 @@ class ShelfTableViewController: UITableViewController {
 //	}
 //	}
 	
-//UITableViewController, UITableViewDataSource, UITableViewDelegate {
-
-//	init(style: UITableViewStyle) {
-//		super.init(style: UITableViewStyle.Plain)
-//	}
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		self.title = libraryName
 		
-		
 	}
+	
+	//#pragma mark - TableViewDataSource
+	func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
+		return 5
+	}
+	
+	func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
+		var cell = tableView.dequeueReusableCellWithIdentifier(ShelfTableView.TableViewIdentifiers.shelfCell, forIndexPath: indexPath) as UITableViewCell
+		
+		return cell
+	}
+	
 	
 	
 }
