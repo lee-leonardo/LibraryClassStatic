@@ -8,46 +8,40 @@
 
 import UIKit
 
-class BookTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+protocol BookTableViewControllerDelegate {
+
+}
+
+class BookTableViewController: UIViewController, UITableViewDataSource {
 	
+	@IBOutlet var booksTableView: UITableView
+	var books = Book[]()
+	var delegate: BookTableViewControllerDelegate?
+	var shelfName: String = "Books"
+
 	struct BookTableView {
 		struct TableViewIdentifiers {
 			static let bookCell = "Cell"
 		}
 	}
 	
-	var shelfName: String = "Books"
-
-//	var books {
-//	get {
-//		
-//	}
-//	set {
-//		
-//	}
-//	willSet {
-//	}
-//	}
-	
 	override func viewDidLoad() {
-		super.viewDidLoad()
-		
+		super.viewDidLoad()		
 		self.title = shelfName
 	}
 	
 	//#pragma mark - TableViewDataSource
 	func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-		return 5
+		return books.count
 	}
 	
 	func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
 		var cell = tableView.dequeueReusableCellWithIdentifier(BookTableView.TableViewIdentifiers.bookCell, forIndexPath: indexPath) as UITableViewCell
-		
+		let item = books[indexPath.row]
+		cell.textLabel.text = item.name as NSString
+
 		return cell
 	}
 	
-	
-//	#pragma mark - Editing Features.
-	
-	
+	//#pragma mark - Editing Features???
 }

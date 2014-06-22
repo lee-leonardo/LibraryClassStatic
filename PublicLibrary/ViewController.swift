@@ -8,14 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-	
+class ViewController: UIViewController, UITableViewDataSource, ShelfTableViewControllerDelegate {
+
 	@IBOutlet var libraryTableView: UITableView
 	var libraries = Library[]()
-	
-//	Test Array.
-//	var books = Book[]()
-	
+	var librariesName = "Libraries"
+		
 	struct MainStoryboard {
 		struct TableViewIdentifiers {
 			static let libraryCell = "Cell"
@@ -24,35 +22,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.title = "Libraries"
-
-//Test related stuff
+		self.title = librariesName
+		
+		//Test related stuff
 		assembleSampleLibrary()
-		testSampleLibrary()
+//		testSampleLibrary()
 		
 	}
 	
 	func assembleSampleLibrary () {
-		//		Creating a Sample Library
+		//Sample Library 1
 		libraries.append(Library(libraryName: "Seattle Public"))
 		libraries[0].shelves.append(Shelf(shelfName: "Fiction"))
 		libraries[0].shelves[0].books.append(Book(bookName: "Brave New World"))
+		libraries[0].shelves[0].books.append(Book(bookName: "Pride and Prejudice"))
 		
 		libraries[0].shelves.append(Shelf(shelfName: "Fantasy"))
 		libraries[0].shelves[1].books.append(Book(bookName: "Lord of the Rings"))
+		libraries[0].shelves[1].books.append(Book(bookName: "The Hobbit"))
 		
-		libraries.append(Library(libraryName: "Odegaard Library"))
+		//Sample Library 2
+		libraries.append(Library(libraryName: "Odegaard"))
 		libraries[1].shelves.append(Shelf(shelfName: "History"))
-		libraries[1].shelves[0].books.append(Book(bookName: ""))
-		
+		libraries[1].shelves[0].books.append(Book(bookName: "Enemies of Rome: From Hannibal to Attila the Hun"))
+		libraries[1].shelves[0].books.append(Book(bookName: "The Story of Britain: From Romans to the Present: A Narrative History"))
+
 		libraries[1].shelves.append(Shelf(shelfName: "Mythology"))
 		libraries[1].shelves[1].books.append(Book(bookName: "Odyssey"))
-		
-		////		Books to test basic functionality.
-		//		books.append(Book(bookName: "Lord of the Rings"))
-		//		books.append(Book(bookName: "Lord of the Flies"))
-		//		books.append(Book(bookName: "The Hobbit"))
-		//		books.append(Book(bookName: "Paradise Lost"))
+		libraries[1].shelves[1].books.append(Book(bookName: "Illiad"))
 		
 	}
 	func testSampleLibrary () {
@@ -63,7 +60,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			for shelf in library.shelves {
 				libraryRecord += "\(shelf.name): "
 				for book in shelf.books {
-					libraryRecord += "\(book.name)"
+					libraryRecord += "\(book.name), "
 				}
 				libraryRecord += "\n"
 			}
@@ -79,25 +76,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
 	//#pragma mark - TableViewDataSource
 	func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
-		//		Change this when you get the code working.
 		let cell = tableView.dequeueReusableCellWithIdentifier(MainStoryboard.TableViewIdentifiers.libraryCell, forIndexPath: indexPath) as UITableViewCell
-		let item = libraries[indexPath.row]
 		
-		cell.textLabel.text = "\(indexPath.row + 1)" as NSString
-		cell.detailTextLabel.text = item.name as NSString
+		let item = libraries[indexPath.row]
+		cell.textLabel.text = item.name as NSString
 		
 		return cell
 	}
-	
 	func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
 		return libraries.count
 	}
 	
-	
-//	#pragma mark - Segues
-//	override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!)  {
-//		var shelf = segue.destinationViewController as ShelfTableViewController
-//		shelf.libraryName = books[indexPath.row].name
-//	}
+	//#pragma mark - Segues
+	override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!)  {		
+		if (segue.identifier == "ToShelfSegue") {
+			let shelf = segue.destinationViewController as ShelfTableViewController
+			var indexPath = self.libraryTableView.indexPathForSelectedRow()
+			var item = libraries[indexPath.row]
+			
+			shelf.libraryName = item.name
+			shelf.shelves = item.shelves
+			shelf.delegate = self
+
+		}
+	}
 }
 
